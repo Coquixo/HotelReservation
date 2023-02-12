@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Error;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthControllers extends Controller
 {
@@ -30,8 +31,22 @@ class AuthControllers extends Controller
                     'message' => $validator->messages()
                 ], 401);
             }
+
+            $user = User::create([
+                'name' => $request->get('name'),
+                'surname' => $request->get('surname'),
+                'email' => $request->get('password'),
+                'password' => bcrypt($request->password)
+            ]);
+
+            $token = JWTAuth::fromUser($user);
+
+            return response()->json(compact('user', 'token'), 201);
         } catch (\Throwable $th) {
-            throw $th;
+            return response([
+                'success' => false,
+                'message' => $th
+            ], 500);
         }
     }
 }
