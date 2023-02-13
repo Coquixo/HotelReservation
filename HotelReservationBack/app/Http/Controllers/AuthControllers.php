@@ -49,4 +49,31 @@ class AuthControllers extends Controller
             ], 500);
         }
     }
+
+    public function login(Request $request)
+    {
+        try {
+            $input = $request->only('email', 'password');
+            $jwt_token = null;
+
+
+            if (!$jwt_token == JWTAuth::attempt($input)) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Wrong credentials'
+                ], 401);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Logged Sucessfully',
+                'token' => $jwt_token,
+            ]);
+        } catch (\Throwable $th) {
+            return response([
+                'success' => false,
+                'message' => $th
+            ], 500);
+        }
+    }
 }
