@@ -19,7 +19,17 @@ class User extends Model
         "phone"
     ];
 
+    // JWT
 
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 
     protected $hidden = [
         'password',
