@@ -32,19 +32,19 @@ class AuthControllers extends Controller
                 ], 401);
             }
 
-            $user = User::create([
+            User::create([
                 'name' => $request->get('name'),
                 'surname' => $request->get('surname'),
                 'email' => $request->get('email'),
                 'password' => bcrypt($request->password),
                 'age' => $request->get('age'),
                 "phone" => $request->get('phone')
-
             ]);
 
-            $token = JWTAuth::fromUser($user);
-
-            return response()->json(compact('user', 'token'), 201);
+            return response()->json([
+                "success" => true,
+                "message" => "Registered successfully"
+            ], 201);
         } catch (\Throwable $th) {
             return response([
                 'success' => false,
