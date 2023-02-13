@@ -20,7 +20,7 @@ class AuthControllers extends Controller
                 'name' => 'required|string|max:255',
                 'surname' => 'required|string|max:255',
                 'email' => 'required|string|max:255|unique:users',
-                'password' => 'required|string|max:255|min:6'
+                'password' => 'required|string|max:255|min:6',
             ]);
 
             //En caso de no ser correcto lo que hacemos es devolver una respuesta de success pero con fallo de auth
@@ -28,15 +28,18 @@ class AuthControllers extends Controller
             if ($validator->fails()) {
                 return response([
                     'success' => true,
-                    'message' => $validator->messages()
+                    'message' => $validator->messages(),
                 ], 401);
             }
 
             $user = User::create([
                 'name' => $request->get('name'),
                 'surname' => $request->get('surname'),
-                'email' => $request->get('password'),
-                'password' => bcrypt($request->password)
+                'email' => $request->get('email'),
+                'password' => bcrypt($request->password),
+                'age' => $request->get('age'),
+                "phone" => $request->get('phone')
+
             ]);
 
             $token = JWTAuth::fromUser($user);
@@ -45,7 +48,8 @@ class AuthControllers extends Controller
         } catch (\Throwable $th) {
             return response([
                 'success' => false,
-                'message' => $th
+                'message' => $th,
+
             ], 500);
         }
     }

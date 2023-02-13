@@ -15,16 +15,18 @@ class User extends Model
         'surname',
         'email',
         'password',
-        'age',
-        'phone',
+        "age",
+        "phone"
     ];
+
+
 
     protected $hidden = [
         'password',
 
     ];
 
-
+    public $timestamps = false;
 
     protected $primaryKey = 'id';
     use HasFactory;
